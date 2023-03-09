@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div>  
+        nickname: <%= user.nickname %> <br>
+        email: <%= user.email %> <br>
+        phone: <%= user.phone %> <br>
+        <% if (user.ban === 1) {%> ban status: 블랙리스트 <%} %>
+        
+    </div>
+
+    <footer>
+        <button onclick = "deleteUser(`<%= user.id %>`)">회원정보 삭제</button><br>
+        <% if (user.ban === 0) {%> <button onclick = "banUser(`<%= user.id %>`, 1)">블랙리스트 처리하기</button> <%}
+        else if (user.ban === 1) {%> <button onclick = "banUser(`<%= user.id %>`, 0)">블랙리스트 취소하기</button> <%} %>
+    </footer>
+    
+</body>
+
+<script>
+    function banUser(userId, ban){
+        axios
+        .put(`/users/${userId}`, 
+        { userId: userId, ban: ban}
+        )
+        .then((res) => {
+            alert(JSON.stringify(res.data))
+            window.location.replace(`/users/${userId}`)
+
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+    }
+
+    function deleteUser(userId){
+        if(confirm('정말 삭제하시겠습니까?')){ 
+        axios
+        .delete(`/users/${userId}`)
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data.message))
+            window.location.replace("http://localhost:3000/users")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+    }    
+    }
+
+    
+
+</script>
+</html>

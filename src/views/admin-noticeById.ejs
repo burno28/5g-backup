@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div id="noticeInfo">  
+        title: <%= notice.title %> <br>
+        description: <%= notice.description %> <br>
+    </div>
+
+    <footer>
+        <button onclick ="deleteNotice(`<%= notice.id %>`)">공지사항 삭제</button><br>
+        <button onclick = "updateCategory(`<%= notice.id %>`)">공지사항 수정</button><br>
+
+    </footer>
+    
+</body>
+
+<script>
+    function updateCategory (noticeId) {
+        document.getElementById("noticeInfo").innerHTML = "";
+        let temp_html = `
+        <div>
+        title : 
+        <input type="text" id="title" value= "<%= notice.title %>">
+        description : 
+        <input type="text" id="description" value= "<%= notice.description %>">
+        <button onclick ="completeUpdate(${noticeId})">수정완료</button>
+        <button onclick ="cancleUpdate()">취소</button>
+        </div>
+        `
+        document.getElementById("noticeInfo").innerHTML = temp_html;
+    }
+
+    function cancleUpdate(){
+        window.location.reload()
+    }
+
+    function completeUpdate(noticeId){
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        axios
+        .put(`http://localhost:3000/notice/${noticeId}`,
+        { title: title, description: description}
+        )
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data))
+            window.location.replace(`http://localhost:3000/notice/${noticeId}`)
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+    }
+
+    function deleteNotice(noticeId){
+        if(confirm('정말 삭제하시겠습니까?')){ 
+        axios
+        .delete(`/notice/${noticeId}`)
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data.message))
+            window.location.replace("http://localhost:3000/notice")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+    }    
+
+    }
+
+    
+</script>
+</html>

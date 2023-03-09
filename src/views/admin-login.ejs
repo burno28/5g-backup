@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>관리자 로그인</title>
+</head>
+<body>
+아이디 :
+<input type="text" id="id">
+비밀번호 :
+<input type="password" id="password">
+<button class="submit-btn" onclick="login()">로그인</button>
+</body>
+
+<script>
+   const loginBtn = document.getElementById('login');
+
+  function login() {
+    const loginId = document.getElementById('id').value;
+    const loginPw = document.getElementById('password').value;
+
+    axios
+        .post('http://localhost:3000/admin/login',
+            { loginId: loginId, loginPw: loginPw }
+        )
+        .then((res) => {
+            // 응답처리
+            alert(res.data)
+            window.location.replace("http://localhost:3000/products")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+}
+
+</script>
+</html>

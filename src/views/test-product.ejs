@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Test Product 리스트</title>
+</head>
+<body>
+<% for(let i = 0; i < data.length; i++) { %>
+    상품이름 :<%= data[i]?.title %>
+    <br/>
+    상품설명: <%= data[i]?.price %><br/>
+    원하는 가격: <%= data[i]?.price %><br/>
+    viewCount: <%= data[i]?.viewCount %><br/>
+    likes: <%= data[i]?.likes %><br/>
+    상품상태: <%= data[i]?.status %><br/>
+    판매자: <%= data[i]?.seller?.nickname %><br/>
+    개시날짜: <%= data[i]?.createdAt %><br/>
+    <div style="display: none">상품id: <%= data[i]?.id %><br/></div>
+    <button onclick="ProductDetail(<%= data[i]?.id %>)">상세 보기</button><br>
+    <button onclick="findMyProducts(<%= data[i]?.id %>)">제시된 가격목록 보기</button><br>
+
+    ---------------------------------------------------------<br>
+<% } %>
+
+<script>
+
+  function ProductDetail(productId) {
+    window.location.href = `products/${ productId }`;
+  }
+
+
+
+	function findMyProducts( productId ) {
+				console.log(productId);
+		axios.get(`products/${ productId }`)
+			.then(response => {
+				window.location.href = `products/${ productId }`;
+			})
+			.catch(error => {
+				if ( error.response ) {
+					if ( error.response.status === 401 || error.response.status === 404 ) {
+						alert(error.response.data.error);
+                        console.log(error)
+						window.location.reload(false);
+					}
+				}
+			});
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>관리자 로그인</title>
+</head>
+<body>
+title :
+<input type="text" id="title">
+description :
+<input type="text" id="description">
+<button class="submit-btn" onclick="createNotice()">작성완료</button>
+<button class="submit-btn" onclick="cancle()">취소</button>
+
+
+</body>
+
+<script>
+  function cancle() {
+    window.location.replace("http://localhost:3000/notice")
+  }
+
+  function createNotice() {
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+
+    axios
+        .post('http://localhost:3000/notice',
+            { title: title, description: description}
+        )
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data))
+            window.location.replace("http://localhost:3000/notice")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+}
+
+</script>
+</html>

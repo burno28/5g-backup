@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>제시된 가격목록 보기</title>
+    </head>
+    <body>
+        <h1>제시된 가격목록 보기</h1>
+    <div>
+        <% for(let i =0; i < data.length; i++) { %>
+        productId :<%= data[i].productId %> <br>
+        buyerId: <%= data[i].buyerId %> <br>
+        deal: <%= data[i].deal %><br>
+        status: <%= data[i].status %><br>
+        ---------------------------------------------------------<br>
+        <% }%>
+    </div>
+    </body>
+    <script>
+    </script>
+</html>

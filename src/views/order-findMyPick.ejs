@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>내가 가격제시한 상품 목록보기</title>
+    </head>
+    <body>
+        <h1>내가 가격제시한 상품 목록보기</h1>
+    <div>
+        <% for(let i =0; i < data.length; i++) { %>
+            상품이름 :<%= data[i]?.product?.title %> <br>
+            판매자가 제시한 가격: <%= data[i]?.product?.price %><br>
+            내가 딜한 가격: <%= data[i]?.deal %><br>
+            viewCount: <%= data[i]?.product?.viewCount %><br>
+            likes: <%= data[i]?.product?.likes %><br>
+            주문상태: <%= data[i]?.status %><br>
+            상품 상태: <%= data[i]?.product?.status %><br>
+            ---------------------------------------------------------<br>
+        <% }%>
+    </div>
+    </body>
+    <script>
+    </script>
+</html>

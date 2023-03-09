@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        padding: 0px;
+        margin: 0px;
+      }
+
+      header {
+        height: 60px;
+          max-width: 600px;
+        background-color: #e9eaed;
+      }
+
+      #wrap {
+        min-height: calc(100% - 120px);
+      }
+
+      footer {
+        height: 60px;
+        background-color: #e9eaed;
+      }
+    </style>
+  </head>
+  <body>
+    <header>header</header>
+    <div id="wrap">
+      <div id="content-wrap">
+        <div>content-wrap</div>
+        <button class="submit-btn" onclick="location.href='orders/mySellProduct'">내가 파는 상품 목록보기</button>
+        <button class="submit-btn" onclick="location.href='orders/products/:productId'">제시된 가격목록 보기</button>
+        <button class="submit-btn" onclick="location.href='orders/myPick'">내가 가격제시한 상품 목록보기</button><br>
+        <button class="submit-btn" onclick="location.href='orders/buyResult/:orderId'">성사된 거래 판매자 정보보기</button>
+        <button class="submit-btn" onclick="location.href='orders/sellResult/:orderId'">성사된 거래 구매자 정보보기</button>
+        <button class="submit-btn" onclick="location.href='orders/myBuyList'">내가 구매한 목록</button>
+        <button class="submit-btn" onclick="location.href='orders/mySellList'">내가 판매한 목록</button>
+        <button class="submit-btn" onclick="location.href='orders/product'">전체 상품 목록</button>
+      </div>
+    </div>
+    <footer>footer</footer>
+  </body>
+</html>

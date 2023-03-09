@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>상품 목록</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div>
+        
+         <% for(var i = 0; i < notices.length; i++)
+         { %>
+            <button onclick="getNotice(`<%=notices[i].id %>`)">
+            title: <%= notices[i].title %> <br>
+            description: <%= notices[i].description %> <br>
+            </button>
+            <% } %>
+
+    </div>
+    <footer>
+        <button onclick="createNotice()">공지 작성하기</button>
+    </footer>
+    
+</body>
+
+<script>
+    function getNotice (noticeId) {
+        window.location.replace(`http://localhost:3000/notice/${noticeId}`)
+    }
+
+    function createNotice(){
+        window.location.replace("http://localhost:3000/post/notice")
+    }
+
+</script>
+</html>

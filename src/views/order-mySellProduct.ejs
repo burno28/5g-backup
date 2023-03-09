@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>내가 파는 상품 목록보기</title>
+    </head>
+    <body>
+        <h1>내가 파는 상품 목록보기</h1>
+    <div>
+        <% for(let i =0; i < data.length; i++) { %>
+        title :<%= data[i].title %> <br>
+        description: <%= data[i].description %> <br>
+        price: <%= data[i].price %><br>
+        ---------------------------------------------------------<br>
+        <% }%>
+    </div>
+    </body>
+    <script>
+    </script>
+</html>

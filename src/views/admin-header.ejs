@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button class="submit-btn" onclick="location.href='/products'">상품</button>
+    <button class="submit-btn" onclick="location.href='/users'">회원</button>
+    <button class="submit-btn" onclick="location.href='/category'">카테고리</button>
+    <button class="submit-btn" onclick="location.href='/notice'">공지사항</button>
+    <br>
+    <button onclick="logout()">로그아웃</button>
+   
+    
+</body>
+
+<script>
+
+     function logout() {
+    axios
+        .post('http://localhost:3000/admin/logout'
+        )
+        .then((res) => {
+            // 응답처리
+            alert(res.data)
+            window.location.replace("http://localhost:3000/admin-login")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+}
+
+</script>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>관리자 로그인</title>
+</head>
+<body>
+name:
+<input type="text" id="name">
+
+<button class="submit-btn" onclick="createCategory()">작성완료</button>
+<button class="submit-btn" onclick="cancle()">취소</button>
+
+</body>
+
+<script>
+
+function cancle() {
+    window.location.replace("http://localhost:3000/category")
+  }
+
+  function createCategory() {
+    const name = document.getElementById('name').value;
+    axios
+        .post('http://localhost:3000/category',
+            { name: name}
+        )
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data))
+            window.location.replace("http://localhost:3000/category")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+}
+
+</script>
+</html>

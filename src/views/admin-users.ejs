@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>상품 목록</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div>
+        
+         <% for(var i = 0; i < users.length; i++)
+         { %>
+            <button onclick="getUser(`<%=users[i].id %>`)">
+            nickname: <%= users[i].nickname %> <br>
+            email: <%= users[i].email %> <br>
+            phone: <%= users[i].phone %> <br>
+            <% if (users[i].ban === 1) {%> ban status: 블랙리스트 <%} %>
+            </button>
+            <% } %>
+
+    </div>
+    
+</body>
+
+<script>
+    function getUser (userId) {
+        window.location.replace(`http://localhost:3000/users/${userId}`)
+    }
+
+
+</script>
+</html>

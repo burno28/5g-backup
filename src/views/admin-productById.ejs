@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div>  
+            title: <%= product.title %> <br>
+            description: <%= product.description %> <br>
+            price: <%= product.price %> <br>
+            view counts: <%= product.viewCount %> <br>
+            likes:  <%= product.likes %> <br>
+            category: <%= category.name %> <br>
+            seller: <%= seller.nickname %> <br>
+            
+    </div>
+
+    <footer>
+        <button onclick = "deleteProduct(`<%= product.id %>`)">삭제하기</button>
+    </footer>
+    
+</body>
+
+<script>
+
+    function deleteProduct(productId){
+
+        if(confirm('정말 삭제하시겠습니까?')){ 
+
+        axios
+        .delete(`/products/${productId}`)
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data.message))
+            window.location.replace("http://localhost:3000/products")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+    }    
+       
+    }
+
+    
+
+</script>
+</html>

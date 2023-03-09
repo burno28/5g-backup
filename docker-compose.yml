@@ -1,0 +1,82 @@
+#도커 컴포즈의 버전은 도커 엔진에 의존성이 존재함
+#본인이 사용하는 도커 엔진의 버전에 맞춰 알맞은 컴포즈 엔진을 사용하는 것을 추천
+#-> 최신 버전인 3.9 사용
+#alpine 태그의 특징은 이미지를 경량화 시켜서 용량이 적은데
+#이는 이후 배포를 가정한다면 배포환경에서 발생될 비용 문제를 절감하고자 alpine 태그를 사용하게 되었음.
+#(컨테이너를 올리고 내리고 하는것도 사실상 돈이기 때문 https://nickjanetakis.com/blog/the-3-biggest-wins-when-using-alpine-as-a-base-docker-image)
+
+
+version: '3.9'
+
+#컨테이너의 네트워크를 지정할 수 있음.
+networks:
+  mysql-net:
+    driver: bridge
+
+#services? 컨테이너를 정의하는 곳
+services:
+  rabbitmq:
+    #image? 도커 이미지를 의미함. 도커 이미지는 도커 레지스트리에 저장되어있음.
+    image: rabbitmq:3-management-alpine
+    #컨테이너의 이름
+    container_name: 5gnun-rabbitmq
+    #꺼졌을시 항상 자동 재시작 할건지?
+    restart: always
+    #포트는 어디를 사용할건지?
+    ports:
+      - 5672:5672
+      - 15672:15672
+    #volumes는 컨테이너의 데이터를 호스트의 폴더에 저장할 수 있도록 해줌.
+    volumes:
+      - ./.docker:/rabbitmq:/var/lib/rabbitmq
+    #환경변수를 설정할 수 있음.
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+  redis:
+    #alpine 은 태그를 의미하며 redis의 버전 등의 값을 줄수 있습니다. (생략하면 latest 를 받게 되어있습니다.)
+    image: redis:alpine
+    #컨테이너의 이름
+    container_name: 5gnun-redis
+    #꺼졌을시 항상 자동 재시작 할건지?
+    restart: always
+    #포트는 어디를 사용할건지?
+    ports:
+      - 6379:6379
+    #volumes는 컨테이너의 데이터를 호스트의 폴더에 저장할 수 있도록 해줌.
+    volumes:
+      - ./.docker/data:/data
+    #appendonly?
+    #appendonly yes를 설정하면 redis는 모든 쓰기 명령을 appendonly.aof 파일에 기록
+    #redis 서버가 재시작되더라도 데이터를 유지할 수 있도록 해줌.
+    command: redis-server --appendonly yes
+
+  mysql:
+
+    #.env 파일의 위치 지정
+    env_file:
+      - "./.env"
+    #5.7과 8중 8을 선택한 이유
+    #8부터 내림차순 인덱스를 지원, 읽기 성능에서 많은 부분 개선되었음.
+    #image? 도커 이미지를 의미함. 도커 이미지는 도커 레지스트리에 저장되어있음.
+    image: mysql:8
+    #컨테이너의 이름
+    container_name: 5gnun-mysql
+    #꺼졌을시 항상 자동 재시작 할건지?
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    #volumes?
+    #컨테이너의 데이터를 호스트의 폴더에 저장할 수 있도록 해줌.
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
+      - ./.docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./.docker/mysql/logs:/var/log/mysql

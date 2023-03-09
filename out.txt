@@ -1,0 +1,47 @@
+/mnt/f/Project/nest.js portfolio/5gnunfleamarket
+├── README.md
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── src/
+|  ├── app.controller.spec.ts
+|  ├── app.controller.ts
+|  ├── app.module.ts
+|  ├── app.service.ts
+|  ├── auth/
+|  |  ├── auth.controller.spec.ts
+|  |  ├── auth.controller.ts
+|  |  ├── auth.module.ts
+|  |  ├── auth.service.spec.ts
+|  |  ├── auth.service.ts
+|  |  └── dto/
+|  ├── global/
+|  |  ├── entities/
+|  |  |  ├── auth.entity.ts
+|  |  |  └── users.entity.ts
+|  |  └── util/
+|  |     ├── logger/
+|  |     |  └── logger.middleware.ts
+|  |     └── swagger/
+|  |        └── swagger-mainpage.ts
+|  ├── main.ts
+|  ├── module/
+|  ├── product/
+|  └── user/
+|     ├── auth.middleware.ts
+|     ├── dto/
+|     |  ├── create-user.dto.ts
+|     |  ├── index.ts
+|     |  ├── jwt-decode-dto.ts
+|     |  └── update-user.dto.ts
+|     ├── user.controller.spec.ts
+|     ├── user.controller.ts
+|     ├── user.module.ts
+|     ├── user.service.spec.ts
+|     └── user.service.ts
+├── tsconfig.build.json
+└── tsconfig.json
+
+directory: 2559 file: 32053
+
+ignored: directory (123)

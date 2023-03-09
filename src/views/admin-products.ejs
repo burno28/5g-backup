@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>상품 목록</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div>
+        
+         <% for(var i = 0; i < products.length; i++)
+         { %>
+            <button onclick="getProduct(`<%=products[i].id %>`)">
+            title: <%= products[i].title %> <br>
+            description: <%= products[i].description %> <br>
+            price: <%= products[i].price %> <br>
+            
+            </button>
+            <% } %>
+
+    </div>
+    
+</body>
+
+<script>
+    function getProduct (productId) {
+        window.location.replace(`http://localhost:3000/products/${productId}`)
+    }
+
+</script>
+</html>

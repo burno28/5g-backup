@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>상품 목록</title>
+</head>
+<body>
+    <header>
+        <%- include('admin-header.ejs')%>
+    </header>
+    
+    <div>
+        <div id="categoryList"> 
+             <% for(var i = 0; i < category.length; i++)
+         { %>
+            <button>
+            name: <%= category[i].name %> 
+            </button>
+
+            <button onclick="updateCategory(`<%=category[i].id %>`, `<%= category[i].name %>`)">수정</button><br>
+            <% } %>
+        </div> 
+
+    </div>
+    <footer>
+        <button onclick="createCategory()">카테고리 작성</button>
+    </footer>
+    
+</body>
+
+<script>
+    function updateCategory (categoryId, name) {
+        
+        document.getElementById("categoryList").innerHTML = "";
+        let temp_html = `
+        <div>
+        name:
+        <input type="text" id="name" value= "${name}">
+        <button onclick ="completeUpdate(${categoryId})">수정완료</button> 
+        <button onclick ="cancleUpdate()">취소</button>
+        </div>
+        `
+        document.getElementById("categoryList").innerHTML = temp_html;
+    }
+
+    function cancleUpdate(){
+        window.location.reload()
+    }
+
+    function completeUpdate(categoryId){
+        const name =  document.getElementById('name').value;
+        axios
+        .put(`http://localhost:3000/category/${categoryId}`,
+            { name: name}
+        )
+        .then((res) => {
+            // 응답처리
+            alert(JSON.stringify(res.data))
+            window.location.replace("http://localhost:3000/category")
+        })
+        .catch((error) => {
+            // 예외처리
+            alert(error.response?.data?.message || error.response.data.errorMessage.details[0].message);
+        });
+    }
+
+    function createCategory(){
+        window.location.replace("http://localhost:3000/post/category")
+    }
+
+</script>
+</html>
