@@ -24,6 +24,8 @@ import { JwtDecodeDto } from 'src/orders/dto/jwtdecode-order.dto';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs';
 
 @Controller('productss')
 export class ProductsController {
@@ -41,10 +43,10 @@ export class ProductsController {
     return this.productsService.getProductById(productId);
   }
   //상품등록
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/')
-  @Render('order-mySellProduct.ejs')
+  @Render('products-upload.ejs')
   createProduct(
     @Cookies('Authentication') jwt: JwtDecodeDto,
     @Body() data: CreateProductDto,
@@ -80,27 +82,65 @@ export class ProductsController {
       data.description,
       data.price,
       data.categoryId,
-      userId, 
+      userId,
     );
   }
- 
+
   //상품삭제
   @UseGuards(JwtAuthGuard)
   @Delete('/:productId')
-  deleteProduct(    
+  deleteProduct(
     @Cookies('Authentication') jwt: JwtDecodeDto,
     @Param('productId') productId: number,
-    @Body() data: DeleteProductDto
-    ) {
-      if (!jwt || !jwt.id) {
-        throw new BadRequestException('Invalid JWT');
-      }
+    @Body() data: DeleteProductDto,
+  ) {
+    if (!jwt || !jwt.id) {
+      throw new BadRequestException('Invalid JWT');
+    }
 
-    return this.productsService.deleteProduct(productId,jwt.id,);
+    return this.productsService.deleteProduct(productId, jwt.id);
   }
   //상품 좋아요
   //@Post('products/:productId')
+
+  @Public()
+  @Post('image')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './tmp',
+        filename: (req, file, cb) => {
+          const filename: string = uuidv4();
+          const ext: string = file.originalname.split('.').pop();
+          cb(null, `${filename}.${ext}`);
+          console.log('tmp 이미지 이름 로그', filename);
+        },
+      }),
+
+      fileFilter: (req, file, cb) => {
+
+        try {
+          if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+            req.fileValidationError = 'Only image files are allowed!';
+            console.log('이미지가 아닌',file.originalname,'이 제거됨');
+            return cb(new BadRequestException('Only image files are allowed!'), false);
+          }
+          cb(null, true);
+        } catch (error) {
+          cb(error, false);
+        }
+      },
+    }),
+  )
+  async uploadImage(@UploadedFile() file) {
+    console.log('이미지?', file);
+    // 파일 저장 로직
+    const { path, filename } = file;
+    const fileStream = fs.createReadStream(path);
+    const writeStream = fs.createWriteStream(`./uploads/${filename}`);
+    await fileStream.pipe(writeStream);
+    // 임시 폴더에서 파일 삭제
+    await fs.promises.unlink(path);
+    console.log(`${path} is deleted!`);
+  }
 }
-
-
-

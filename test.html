@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Create Product</title>
+</head>
+<body>
+  <form id="createProductForm">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title"><br>
+
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br>
+
+    <label for="price">Price:</label><br>
+    <input type="number" id="price" name="price"><br>
+
+    <label for="category">Category:</label><br>
+    <select id="category" name="category">
+      <option value="1">Category 1</option>
+      <option value="2">Category 2</option>
+      <option value="3">Category 3</option>
+    </select><br>
+
+    <label for="images">Images:</label><br>
+    <input type="file" id="images" name="images" multiple><br>
+
+    <button type="submit">Create Product</button>
+  </form>
+
+  <script>
+    const createProductForm = document.getElementById('createProductForm');
+    createProductForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const price = document.getElementById('price').value;
+      const category = document.getElementById('category').value;
+      const images = document.getElementById('images').files;
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('price', price);
+      formData.append('categoryId', category);
+
+      for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+      }
+
+      const response = await fetch('/products', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+      console.log(data);
+    });
+  </script>
+</body>
+</html>
